@@ -5,26 +5,40 @@ public class FlickerLights : MonoBehaviour
 {
 
     public float startFlicker = 15f;
-    public float shutoff = 25f;
-    private Light lite;
+    public float shutoff = 5f;
+    private Light _lite;
+    public GameObject elevatorMusic;
+    public AudioSource creepyMusic;
+    public GameObject monster;
+
 
     void Start()
     {
-        lite = this.GetComponent<Light>();
+        _lite = this.GetComponent<Light>();
         StartCoroutine(LateCall());
     }
 
     IEnumerator LateCall()
     {
         yield return new WaitForSeconds(startFlicker);
-        lite.enabled = !lite.enabled;
+        _lite.enabled = !_lite.enabled;
         yield return new WaitForSeconds(Random.Range(0.1f, 0.3f));
-        lite.enabled = !lite.enabled;
+        _lite.enabled = !_lite.enabled;
         yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
-        lite.enabled = !lite.enabled;
+        _lite.enabled = !_lite.enabled;
         yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
-        lite.enabled = !lite.enabled;
+        _lite.enabled = !_lite.enabled;
         yield return new WaitForSeconds(shutoff);
-        lite.enabled = false;
+        _lite.enabled = false;
+        elevatorMusic.SetActive(false);
+
+        if(!creepyMusic.isPlaying)
+           creepyMusic.PlayDelayed(1.5f);
+        yield return new WaitForSeconds(7f);
+        Transform[] ChildrenTransforms = monster.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in ChildrenTransforms)
+            t.gameObject.SetActive(true);      // enable all the objects in the list (even the parent)
     }
+
+
 }
